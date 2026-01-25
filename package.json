@@ -3,13 +3,16 @@
   "displayName": "TomatoNote",
   "description": "pomodoro timer",
   "version": "0.0.1",
+  "publisher": "kantas-spike",
   "engines": {
     "vscode": "^1.108.1"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:markdown"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -20,6 +23,10 @@
       {
         "command": "tomatonote.stopTimer",
         "title": "TomatoNote: Stop Pomodoro Timer"
+      },
+      {
+        "command": "tomatonote.openMarkdownFileAtTask",
+        "title": "TomatoNote: Open current task in .md"
       }
     ],
     "configuration": {
@@ -66,19 +73,30 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
+    "package": "vsce package",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "coverage": "vscode-test --coverage"
   },
   "devDependencies": {
-    "@types/vscode": "^1.108.1",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
-    "typescript-eslint": "^8.52.0",
-    "eslint": "^9.39.2",
-    "typescript": "^5.9.3",
+    "@types/ramda": "^0.31.1",
+    "@types/sinon": "^21.0.0",
+    "@types/vscode": "^1.108.1",
     "@vscode/test-cli": "^0.0.12",
-    "@vscode/test-electron": "^2.5.2"
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.39.2",
+    "ramda": "^0.32.0",
+    "sinon": "^21.0.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.52.0",
+    "vsce": "^2.15.0"
+  },
+  "dependencies": {
+    "smol-toml": "^1.6.0",
+    "yaml": "^2.8.2"
   }
 }
