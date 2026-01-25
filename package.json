@@ -1,0 +1,84 @@
+{
+  "name": "tomatonote",
+  "displayName": "TomatoNote",
+  "description": "pomodoro timer",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.108.1"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "tomatonote.startTimer",
+        "title": "TomatoNote: Start Pomodoro Timer"
+      },
+      {
+        "command": "tomatonote.stopTimer",
+        "title": "TomatoNote: Stop Pomodoro Timer"
+      }
+    ],
+    "configuration": {
+      "title": "TomatoNote Settings",
+      "properties": {
+        "tomatonote.pomodoroMinutes": {
+          "type": "number",
+          "default": 25,
+          "description": "Length of a pomodoro session in minutes."
+        },
+        "tomatonote.shortBreakMinutes": {
+          "type": "number",
+          "default": 5,
+          "description": "Length of a short break in minutes."
+        },
+        "tomatonote.longBreakMinutes": {
+          "type": "number",
+          "default": 15,
+          "description": "Length of a long break in minutes."
+        },
+        "tomatonote.soundPomodoroToLong": {
+          "type": "string",
+          "default": "sounds/soundPomodoroToLong.mp3",
+          "description": "Path to the sound played when a Pomodoro finishes and a long break starts."
+        },
+        "tomatonote.soundPomodoroToShort": {
+          "type": "string",
+          "default": "sounds/soundPomodoroToShort.mp3",
+          "description": "Path to the sound played when a Pomodoro finishes and a short break starts."
+        },
+        "tomatonote.soundShortToPomodoro": {
+          "type": "string",
+          "default": "sounds/soundShortToPomodoro.mp3",
+          "description": "Path to the sound played when a short break ends and work resumes."
+        },
+        "tomatonote.soundLongToPomodoro": {
+          "type": "string",
+          "default": "sounds/soundLongToPomodoro.mp3",
+          "description": "Path to the sound played when a long break ends and work resumes."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.108.1",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "typescript-eslint": "^8.52.0",
+    "eslint": "^9.39.2",
+    "typescript": "^5.9.3",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
