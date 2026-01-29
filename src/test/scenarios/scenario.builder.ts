@@ -12,7 +12,6 @@ import {
   workspace,
   WorkspaceConfiguration,
 } from "vscode";
-import { RecursivePartial } from "../recursive-partial";
 
 export class ScenarioBuilder {
   private sandbox: sinon.SinonSandbox;

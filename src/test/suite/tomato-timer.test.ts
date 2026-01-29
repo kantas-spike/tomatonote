@@ -7,13 +7,11 @@ import { ScenarioBuilder } from "../scenarios/scenario.builder";
 import { TomatoTimer } from "../../tomato-timer";
 import { buildConfig, Config } from "../../config/config";
 
-import { useFixtures } from "../helpers/fixtureHelper";
+import { useFixtures } from "../helpers/fixture-helper";
 
 describe("TomatoTimer Test Suite", () => {
   let scenario: ScenarioBuilder;
   let config: Config;
-  let tempDir: string;
-  let cleanup: () => Promise<void>;
 
   beforeEach(() => {
     scenario = new ScenarioBuilder();

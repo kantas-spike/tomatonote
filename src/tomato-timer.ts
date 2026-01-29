@@ -7,6 +7,7 @@ import { Task } from "./task";
 import { TomatoUI } from "./tomat-ui";
 import { Phase } from "./types";
 import { SoundPlayer } from "./sound-player";
+import { DailyStats } from "./daily-stats";
 
 export class TomatoTimer {
   private config: Config | undefined;
@@ -64,7 +65,7 @@ export class TomatoTimer {
     }
 
     // Look for existing ID comment `<!-- id:xxxx -->`
-    if (!this.currentTask.getTaskId()) {
+    if (!this.currentTask.id) {
       // generate short base‑36 random string
       this.currentTask.appendTaskId(editor, line);
     }
@@ -88,26 +89,32 @@ export class TomatoTimer {
     this.config = config;
   }
 
-  public incrementPomodoroCount(document: vscode.TextDocument, taskId: string) {
-    const editor = vscode.window.activeTextEditor;
+  public async incrementPomodoroCount(editor: vscode.TextEditor, task: Task) {
+    const taskId = task.id;
 
-    if (editor) {
-      // frontmatterを取得
-      const data = fm.getFrontMatter(editor);
-      if (!("params" in data)) {
-        data["params"] = {};
-      }
-      if (!("tasks" in data["params"])) {
-        data["params"]["tasks"] = {};
-      }
-      if (!(taskId in data["params"]["tasks"])) {
-        data["params"]["tasks"][taskId] = { tomato: 0 };
-      }
-      data["params"]["tasks"][taskId]["tomato"] += 1;
-
-      fm.updateFrontMatter(editor, data, true);
-      // console.log(data);
+    if (!taskId) {
+      throw new Error("taskidの取得に失敗しました");
     }
+
+    // frontmatterを取得
+    const data = fm.getFrontMatter(editor);
+    if (!("params" in data)) {
+      data["params"] = {};
+    }
+    if (!("tasks" in data["params"])) {
+      data["params"]["tasks"] = {};
+    }
+    if (!(taskId in data["params"]["tasks"])) {
+      data["params"]["tasks"][taskId] = { tomato: 0 };
+    }
+    data["params"]["tasks"][taskId]["tomato"] += 1;
+
+    fm.updateFrontMatter(editor, data, true);
+    // console.log(data);
+
+    // ~/.tomatonote
+    const daily = new DailyStats();
+    await daily.increment(task);
   }
 
   public tick() {
@@ -126,10 +133,7 @@ export class TomatoTimer {
           editor.document.languageId === "markdown" &&
           this.currentTask
         ) {
-          const taskId = this.currentTask.getTaskId();
-          if (taskId) {
-            this.incrementPomodoroCount(editor.document, taskId);
-          }
+          this.incrementPomodoroCount(editor, this.currentTask);
         }
         this.completedPomodoros++;
         // decide next break length and play transition sound

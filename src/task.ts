@@ -2,15 +2,15 @@ import * as tl from "./task-line";
 import * as vscode from "vscode";
 
 export class Task {
-  private uri: vscode.Uri;
+  private _uri: vscode.Uri;
   private line: vscode.TextLine;
   private text: string;
   private name: string | undefined;
-  private id: string | undefined;
+  private _id: string | undefined;
   private checked: boolean = false;
 
   constructor(uri: vscode.Uri, line: vscode.TextLine) {
-    this.uri = uri;
+    this._uri = uri;
     this.line = line;
     this.text = line.text;
     if (this.isTaskLine()) {
@@ -20,9 +20,9 @@ export class Task {
   }
 
   public appendTaskId(editor: vscode.TextEditor, line: vscode.TextLine) {
-    this.id = tl.getTaskId(this.text);
-    if (!this.id) {
-      this.id = Math.random().toString(36).substr(2);
+    this._id = tl.getTaskId(this.text);
+    if (!this._id) {
+      this._id = Math.random().toString(36).substr(2);
     }
     this.updateTaskLine(editor, line);
   }
@@ -44,8 +44,20 @@ export class Task {
     return tl.isTaskLine(this.text);
   }
 
-  public getTaskId() {
-    return this.id;
+  get id(): string | undefined {
+    return this._id;
+  }
+
+  set id(id: string | undefined) {
+    this._id = id;
+  }
+
+  get uri(): vscode.Uri {
+    return this._uri;
+  }
+
+  set uri(uri: vscode.Uri) {
+    this._uri = uri;
   }
 
   public getTaskName() {
@@ -53,7 +65,7 @@ export class Task {
   }
 
   public taskLine() {
-    return `- [${this.checked ? "x" : " "}] ${this.name} <!-- id:${this.id} -->`;
+    return `- [${this.checked ? "x" : " "}] ${this.name} <!-- id:${this._id} -->`;
   }
 
   public openMarkdownFileAtTask() {
@@ -61,7 +73,7 @@ export class Task {
       this.line.lineNumber,
       this.line.firstNonWhitespaceCharacterIndex,
     );
-    vscode.window.showTextDocument(this.uri, {
+    vscode.window.showTextDocument(this._uri, {
       selection: new vscode.Range(pos, pos),
     });
   }
