@@ -2,7 +2,7 @@
   "name": "tomatonote",
   "displayName": "TomatoNote",
   "description": "pomodoro timer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "kantas-spike",
   "repository": "github:kantas-spike/tomatonote",
   "engines": {
